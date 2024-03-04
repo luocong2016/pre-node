@@ -1,12 +1,16 @@
 import "reflect-metadata"
 
 function validate<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) {
-  console.log(descriptor)
-
   let set = descriptor.set!
 
+  // console.log(set) // [Function: set xx]
+
   descriptor.set = function (value: T) {
+    // console.log(Reflect) // Object [Reflect] {}
+
     let type = Reflect.getMetadata("design:type", target, propertyKey)
+
+    // console.log(type, target, propertyKey) // [class Point] {} start
 
     if (!(value instanceof type)) {
       throw new Error(`Invalid type, got ${typeof value} not ${type.name}.`)
@@ -47,9 +51,9 @@ class Line {
 
 const line = new Line()
 line.start = new Point(0, 0)
-line.end = new Point(1, 1)
+// line.end = new Point(1, 1)
 
 // @ts-ignore
 // line.end = {}
 
-console.log(line)
+// console.log(line)

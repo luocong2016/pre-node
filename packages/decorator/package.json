@@ -10,7 +10,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "reflect-metadata": "^0.2.1",
-    "ts-node": "^10.9.2"
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.22",
+    "reflect-metadata": "^0.2.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }
