@@ -19,6 +19,8 @@ export const children = Object.keys(modules).reduce((pre, key) => {
   return pre
 }, [])
 
+console.log(children)
+
 function dfs(arr: any[], target: string[], fileType: string, index = 0) {
   if (target.length === 0 || index > target.length - 1) return
 
@@ -46,15 +48,23 @@ function dfs(arr: any[], target: string[], fileType: string, index = 0) {
       component,
     }
     arr.push(chirenItem)
+
+    if (
+      target.length > 1 &&
+      target[target.length - 1] === capitalizeFirstLetter(target[target.length - 2])
+    ) {
+      arr.pop()
+    }
   }
 
   chirenItem?.children && dfs(chirenItem.children, target, fileType, index + 1)
 }
 
 function getComponent(target: any[], index: number) {
-  const key = `./${target.slice(0, index).join("/")}/${capitalizeFirstLetter(
+  const key = `./${target.slice(0, index + 1).join("/")}/${capitalizeFirstLetter(
     target[index]
   )}`.replace(/\/\//, "/")
+
   return modules[`${key}.vue`] ?? modules[`${key}.tsx`]
 }
 
