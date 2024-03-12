@@ -1,14 +1,15 @@
 import _ from "lodash"
+import { type RouteRecordRaw } from "vue-router"
 
-const modules = import.meta.glob(["./**/*.(tsx|vue)"], { eager: true, import: "default" })
+const modules = import.meta.glob(["./demo/**/*.(tsx|vue)"], { eager: true, import: "default" })
 
-const exclude = ["./Demo.vue"]
+const exclude: string[] = []
 
 function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-export const children = Object.keys(modules).reduce((pre, key) => {
+export const DemoRoutes: RouteRecordRaw[] = Object.keys(modules).reduce((pre, key) => {
   if (exclude.includes(key)) return pre
 
   const [level, fileType] = key.replace(/^\.\//, "").split(".")
@@ -19,12 +20,15 @@ export const children = Object.keys(modules).reduce((pre, key) => {
   return pre
 }, [])
 
-console.log(children)
+// vue-router 根路由必须要 /^\// 开始
+DemoRoutes[0].path = "/demo"
+
+console.log(DemoRoutes)
 
 function dfs(arr: any[], target: string[], fileType: string, index = 0) {
   if (target.length === 0 || index > target.length - 1) return
 
-  const fullPath = `/demo/${target.slice(0, index + 1).join("/")}`
+  const fullPath = `/${target.slice(0, index + 1).join("/")}`
 
   let chirenItem = arr.find((o) => o.name === fullPath)
 
@@ -72,21 +76,9 @@ function whetherIf(target: any[], index: number) {
   if (target.length - 1 < index) return
   const str = target.slice(0, index + 1).join("/")
   if (modules[`./${str}/index.vue`] || modules["./${str}/index.tsx"]) {
-    return `/demo/${str}/index`
+    return `/${str}/index`
   }
   return whetherIf(target, index + 1)
 }
 
-export default import.meta.env.MODE === "development"
-  ? [
-      {
-        name: "/demo",
-        path: "/demo",
-        label: "Demo",
-        title: "Demo",
-        meta: { title: "Demo" },
-        component: () => import("@/pages/demo/Demo.vue"),
-        children,
-      },
-    ]
-  : []
+export default import.meta.env.MODE === "development" ? DemoRoutes : []

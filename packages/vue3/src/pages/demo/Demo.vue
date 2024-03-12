@@ -17,12 +17,12 @@ import { ref } from "vue"
 import { RouterView, useRoute, useRouter } from "vue-router"
 import { Menu, type MenuProps } from "ant-design-vue"
 
-import { children } from "."
+import { DemoRoutes } from "../demo"
 
 const current = ref<string[]>([])
 
 // 需要删除 component 否则会报错
-const source = _.cloneDeep(children)
+const source = _.cloneDeep(DemoRoutes[0].children)!
 function dfs(arr: any[]) {
   arr.forEach((o) => {
     Reflect.deleteProperty(o, "component")
@@ -31,7 +31,7 @@ function dfs(arr: any[]) {
 }
 dfs(source)
 
-const items = ref<MenuProps["items"]>(source)
+const items = ref<MenuProps["items"]>(source as any)
 
 const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
   router.push(key as string)
@@ -57,3 +57,4 @@ const router = useRouter()
   flex-direction: column;
 }
 </style>
+..
