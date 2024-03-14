@@ -6,15 +6,16 @@
       :items="items"
       @click="handleMenuClick"
     />
-    <div>{{ route.meta?.title }}</div>
-    <RouterView />
+    <div class="container">
+      <RouterView />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import _ from "lodash"
 import { ref } from "vue"
-import { RouterView, useRoute, useRouter } from "vue-router"
+import { RouterView, useRouter } from "vue-router"
 import { Menu, type MenuProps } from "ant-design-vue"
 
 import { DemoRoutes } from "../demo"
@@ -37,7 +38,6 @@ const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
   router.push(key as string)
 }
 
-const route = useRoute()
 const router = useRouter()
 </script>
 
@@ -56,5 +56,8 @@ const router = useRouter()
   display: flex;
   flex-direction: column;
 }
+
+.container {
+  padding: 15px;
+}
 </style>
-..
