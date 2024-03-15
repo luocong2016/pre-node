@@ -1,19 +1,18 @@
-import type { AppListProps } from "./type"
+import type { AppListProps, AppItemProps } from "./type"
 import type { PropType } from "vue"
 
 import { defineComponent } from "vue"
 import { DefaultRenderLogo } from "."
 
-const DefaultContent = defineComponent({
+export const DefaultContent = defineComponent({
   props: {
     appList: Array as PropType<AppListProps>,
     baseClassName: String,
     hashId: String,
+    itemClick: Function as PropType<(item: AppItemProps) => void>,
   },
 
-  emits: ["itemClick"],
-
-  setup(props, { emit }) {
+  setup(props) {
     return () => (
       <div class={`${props.baseClassName}-content ${props.hashId}`.trim()}>
         <ul class={`${props.baseClassName}-content-list ${props.hashId}`.trim()}>
@@ -32,7 +31,7 @@ const DefaultContent = defineComponent({
 
                   <DefaultContent
                     hashId={props.hashId}
-                    onItemClick={() => emit("itemClick", app)}
+                    itemClick={props.itemClick}
                     appList={app?.children}
                     baseClassName={props.baseClassName}
                   />
@@ -46,12 +45,15 @@ const DefaultContent = defineComponent({
                 class={`${props.baseClassName}-content-list-item ${props.hashId}`.trim()}
                 onClick={(e) => {
                   e.stopPropagation()
-                  emit("itemClick", app)
+                  props.itemClick?.(app)
                 }}
               >
-                <a href={app.url} target={app.target} rel="noreferrer">
+                <a
+                  href={props.itemClick ? "javascript:;" : app.url}
+                  target={app.target}
+                  rel="noreferrer"
+                >
                   <DefaultRenderLogo logo={app.icon} />
-
                   <div>
                     <div>{app.title}</div>
                     {app.desc ? <span>{app.desc}</span> : null}
@@ -65,5 +67,3 @@ const DefaultContent = defineComponent({
     )
   },
 })
-
-export default DefaultContent

@@ -8,6 +8,7 @@ import useStyle from "./style"
 
 const globalFooterProps = {
   prefixCls: String,
+  copyright: String,
   links: Array as PropType<
     {
       key?: string
@@ -16,7 +17,6 @@ const globalFooterProps = {
       blankTarget?: boolean
     }[]
   >,
-  copyright: String,
 }
 
 export default defineComponent({
