@@ -1,4 +1,4 @@
-import type { AppitemProps, AppListProps } from "./type"
+import type { AppItemProps, AppListProps } from "./type"
 import type { PropType } from "vue"
 
 import { defineComponent, ref } from "vue"
@@ -6,7 +6,7 @@ import { DefaultContent } from "./DefaultContent"
 
 import useStyle from "./style"
 
-export const defaultRenderLogo = defineComponent({
+export const DefaultRenderLogo = defineComponent({
   props: {
     logo: [String, Function],
   },

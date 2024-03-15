@@ -36,6 +36,6 @@ const genFooterToolBarStyle: GenerateStyle<GlobalFooterToken> = (token) => {
   }
 }
 
-export default genComponentStyleHook<any>("ProLayoutGlobalFooter", (token) => {
+export default genComponentStyleHook("ProLayoutGlobalFooter", (token) => {
   return [genFooterToolBarStyle(token)]
 })

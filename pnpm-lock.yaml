@@ -36,6 +36,12 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
 
+  packages/layout:
+    dependencies:
+      vue:
+        specifier: ^3.4.19
+        version: 3.4.21(typescript@5.3.3)
+
   packages/vue3:
     dependencies:
       '@ant-design/icons-vue':
@@ -66,6 +72,9 @@ importers:
       '@babel/plugin-proposal-decorators':
         specifier: ^7.24.0
         version: 7.24.0(@babel/core@7.24.0)
+      '@ctrl/tinycolor':
+        specifier: ^4.0.3
+        version: 4.0.3
       '@types/lodash':
         specifier: ^4.14.202
         version: 4.14.202
@@ -87,6 +96,22 @@ importers:
       vue-tsc:
         specifier: ^1.8.27
         version: 1.8.27(typescript@5.3.3)
+
+  packages/vue3/src/layout:
+    dependencies:
+      '@ant-design/icons-vue':
+        specifier: ^7.0.1
+        version: 7.0.1(vue@3.4.21)
+      ant-design-vue:
+        specifier: ^4.1.2
+        version: 4.1.2(vue@3.4.21)
+      vue-router:
+        specifier: ^4.3.0
+        version: 4.3.0(vue@3.4.21)
+    devDependencies:
+      less:
+        specifier: ^4.2.0
+        version: 4.2.0
 
 packages:
 
@@ -689,6 +714,11 @@ packages:
     resolution: {integrity: sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==}
     engines: {node: '>=10'}
     dev: false
+
+  /@ctrl/tinycolor@4.0.3:
+    resolution: {integrity: sha512-e9nEVehVJwkymQpkGhdSNzLT2Lr9UTTby+JePq4Z2SxBbOQjY7pLgSouAaXvfaGQVSAaY0U4eJdwfSDmCbItcw==}
+    engines: {node: '>=14'}
+    dev: true
 
   /@emotion/hash@0.9.1:
     resolution: {integrity: sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==}

@@ -1,12 +1,12 @@
 import { VueNode } from "@/utils/makeStyle"
 
-export type AppitemProps = {
+export type AppItemProps = {
   title: VueNode
   desc?: VueNode
   icon?: VueNode | (() => VueNode)
   url?: string
   target?: string
-  children?: Omit<AppitemProps, "children">[]
+  children?: Omit<AppItemProps, "children">[]
 }
 
-export type AppListProps = AppitemProps[]
+export type AppListProps = AppItemProps[]
