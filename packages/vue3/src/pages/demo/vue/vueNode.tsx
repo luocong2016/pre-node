@@ -27,10 +27,14 @@ export default defineComponent({
     const search = ref()
 
     return () => (
-      <Space align="center">
-        <Input v-model={[search.value, "value"]} />
-        <Children text={search.value} />
-      </Space>
+      <>
+        <div>Function DOM 响应性数据</div>
+        <hr />
+        <Space align="center">
+          <Input v-model={[search.value, "value"]} />
+          <Children text={search.value} />
+        </Space>
+      </>
     )
   },
 })
