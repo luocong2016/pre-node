@@ -20,7 +20,9 @@ import { Menu, type MenuProps } from "ant-design-vue"
 
 import { DemoRoutes } from "../demo"
 
-const current = ref<string[]>([])
+const router = useRouter()
+
+const current = ref<string[]>([router.currentRoute.value.fullPath])
 
 // 需要删除 component 否则会报错
 const source = _.cloneDeep(DemoRoutes[0].children)!
@@ -37,8 +39,6 @@ const items = ref<MenuProps["items"]>(source as any)
 const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
   router.push(key as string)
 }
-
-const router = useRouter()
 </script>
 
 <style lang="less" scoped>

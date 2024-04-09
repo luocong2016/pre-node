@@ -1,7 +1,8 @@
-import { defineComponent, ref, type FunctionalComponent } from "vue"
-import { Input, Space } from "ant-design-vue"
+import { defineComponent, ref, computed, type FunctionalComponent } from "vue"
+import { Input, Button, Space } from "ant-design-vue"
 
 import { VueNode } from "@/layout/src/typing"
+import { useBoolean } from "@/layout/src/components/hooks"
 
 function analysis<
   K extends keyof P,
@@ -26,9 +27,18 @@ const Child: FunctionalComponent<
   {},
   { title?: () => VueNode }
 > = (props, { slots }) => {
+  // 这里是并不是响应的!!!不要这么写
+  const [bool, { toggle }] = useBoolean(false)
+  const comp = computed(() => {
+    JSON.stringify(props.title)
+  })
+
   return (
     <div>
       {typeof props.title}: {analysis("title", props, slots)}
+      <span>{comp.value}</span>
+      <span>| - 这里不是响应性的</span>
+      <Button onClick={() => toggle()}>{JSON.stringify(bool.value)}</Button>
     </div>
   )
 }
@@ -61,8 +71,7 @@ const Child: FunctionalComponent<
       {typeof props.title}: {analysis("title", props, slots)}
     </div>
   )
-}
-`
+}`
 
 export default defineComponent({
   setup() {

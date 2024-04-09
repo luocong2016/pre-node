@@ -13,8 +13,10 @@
     "@antv/g6": "^4.8.24",
     "@vueuse/core": "^10.9.0",
     "ant-design-vue": "^4.1.2",
+    "d3": "^7.9.0",
     "less": "^4.2.0",
     "lodash": "^4.17.21",
+    "three": "^0.163.0",
     "vue": "^3.4.19",
     "vue-router": "^4.3.0"
   },
@@ -22,9 +24,11 @@
     "@babel/plugin-proposal-decorators": "^7.24.0",
     "@ctrl/tinycolor": "^4.0.3",
     "@types/lodash": "^4.14.202",
+    "@types/three": "^0.163.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "default-passive-events": "^2.0.0",
+    "postcss-px-to-viewport": "^1.1.1",
     "typescript": "^5.2.2",
     "vite": "^5.1.4",
     "vue-tsc": "^1.8.27"
