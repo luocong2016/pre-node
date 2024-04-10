@@ -5,9 +5,11 @@ import * as THREE from "three"
 // @ts-ignore
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 
+// https://github.com/nie-ny/blog/blob/main/%E6%96%87%E7%AB%A0/three/Three.js%20-%20%E7%BB%98%E5%88%B6%E4%B8%AD%E5%9B%BD%E5%9C%B0%E5%9B%BE%EF%BC%88%E4%BA%8C%E5%8D%81%E4%B8%80%EF%BC%89.html
+
 export default defineComponent({
   setup() {
-    const canvasRef = ref<HTMLCanvasElement>()
+    const canvasRef = ref()
 
     onMounted(() => {
       // 以北京为中心 修改坐标
@@ -20,20 +22,24 @@ export default defineComponent({
       const aspect = 2 // 相机默认值 画布的宽高比
       const near = 0.1 // 近平面
       const far = 10000 // 远平面
+
       // 透视投影相机
       const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
       camera.position.set(0, 0, 300)
       camera.lookAt(0, 0, 0)
+
       // 控制相机
       const controls = new OrbitControls(camera, canvasRef.value)
       controls.update()
 
       // 场景
       const scene = new THREE.Scene()
+
       // 坐标轴 辅助
-      var axes = new THREE.AxesHelper(700)
+      const axes = new THREE.AxesHelper(700)
       scene.add(axes)
 
+      // 区块-防止污染
       {
         const color = 0xffffff
         const intensity = 1
@@ -44,8 +50,14 @@ export default defineComponent({
       }
 
       const loader = new THREE.FileLoader()
+
+      // ./ 会默认当前路径这是不对的，或设置 vite/public
       loader.load(`${window.location.origin}/100000_full.json`, (data) => {
-        const jsondata = JSON.parse(data as string)
+        const jsondata = JSON.parse(data)
+
+        // { type: "FeatureCollection", }
+        console.log("100000_full.json: ", jsondata)
+
         operationData(jsondata)
       })
 
@@ -54,15 +66,8 @@ export default defineComponent({
        * @param polygon 多边形 点数组
        * @param color 材质颜色
        * */
-      function drawExtrudeMesh(polygon: any[], color: string) {
+      function drawExtrudeMesh(polygon, color) {
         const shape = new THREE.Shape()
-        // polygon.forEach((row, i) => {
-        //   const [x, y] = [row[0], row[1]]
-        //   if (i === 0) {
-        //     shape.moveTo(x, y)
-        //   }
-        //   shape.lineTo(x, y)
-        // })
         polygon.forEach((row, i) => {
           const [x, y] = projection(row)
           if (i === 0) {
@@ -89,7 +94,7 @@ export default defineComponent({
        * @param polygon 多边形 点数组
        * @param color 材质颜色
        * */
-      function lineDraw(polygon: any[], color: string) {
+      function lineDraw(polygon, color) {
         const lineGeometry = new THREE.BufferGeometry()
         const pointsArray = new Array()
         polygon.forEach((row) => {
@@ -100,28 +105,29 @@ export default defineComponent({
         // 放入多个点
         lineGeometry.setFromPoints(pointsArray)
 
-        const lineMaterial = new THREE.LineBasicMaterial({
-          color: color,
-        })
+        const lineMaterial = new THREE.LineBasicMaterial({ color })
         return new THREE.Line(lineGeometry, lineMaterial)
       }
 
       const map = new THREE.Object3D()
-      // 解析数据
-      function operationData(jsondata: any) {
-        // 全国信息
-        const features = jsondata.features
 
+      // 解析数据 -> 全国 features 信息
+      function operationData({ features }) {
         features.forEach((feature) => {
           // 单个省份 对象
           const province = new THREE.Object3D()
-          // 地址
-          province.properties = feature.properties.name
-          const coordinates = feature.geometry.coordinates
-          // const color = 'yellow'
-          const color = ["重庆市", "上海市"].includes(feature.properties.name) ? "blue" : "yellow"
 
-          if (feature.geometry.type === "MultiPolygon") {
+          const { properties, geometry } = feature
+
+          // 地址
+          province.properties = properties.name
+          const { coordinates, type } = geometry
+
+          // const color = 'yellow'
+          const color = ["重庆市", "上海市"].includes(properties.name) ? "blue" : "yellow"
+
+          // 数据中有两种类型 "MultiPolygon"、"Polygon"
+          if (type === "MultiPolygon") {
             // 多个，多边形
             coordinates.forEach((coordinate) => {
               // coordinate 多边形数据
@@ -132,9 +138,7 @@ export default defineComponent({
                 province.add(mesh)
               })
             })
-          }
-
-          if (feature.geometry.type === "Polygon") {
+          } else if (type === "Polygon") {
             // 多边形
             coordinates.forEach((coordinate) => {
               const mesh = drawExtrudeMesh(coordinate, color)
@@ -143,8 +147,12 @@ export default defineComponent({
               province.add(mesh)
             })
           }
+          console.log(`${properties.name} province: `, province)
+
           map.add(province)
         })
+
+        console.log("map:", map)
 
         scene.add(map)
       }

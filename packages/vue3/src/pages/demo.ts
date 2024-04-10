@@ -1,7 +1,7 @@
 import _ from "lodash"
 import { type RouteRecordRaw } from "vue-router"
 
-const modules = import.meta.glob(["./demo/**/*.(tsx|vue)"], { eager: true, import: "default" })
+const modules = import.meta.glob(["./demo/**/*.(tsx|jsx|vue)"], { eager: true, import: "default" })
 
 const exclude: string[] = []
 
